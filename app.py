@@ -5,7 +5,7 @@ from src.train import train_models
 
 # Page Config
 st.set_page_config(
-    page_title="Interview Predictor Pro",
+    page_title="Interview Predictor and Reccomendation",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -184,8 +184,8 @@ with st.sidebar:
 # Header
 st.markdown("""
     <div class="main-header">
-        <h1>Interview Predictor Pro</h1>
-        <p>Advanced AI analytics for software engineering interview preparation.</p>
+        <h1>Interview Predictor and Reccomendation</h1>
+        <p>AI analytics for software engineering interview preparation.</p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -198,75 +198,79 @@ with col_input:
     
     analyze_btn = st.button("Generate Analysis", use_container_width=True)
 
-if analyze_btn and question:
-    predictor = Predictor()
-    if not predictor.cat_model:
-         st.error("System initialization required. Please retrain models.")
-    else:
-        with st.spinner("Running inference..."):
-            result = predictor.predict(question)
-        
+if analyze_btn:
+    if not question:
         with col_results:
-            st.markdown("###  Analysis Results")
+            st.warning("Please enter a question to generate analysis.")
+    else:
+        predictor = Predictor()
+        if not predictor.cat_model:
+             st.error("System initialization required. Please retrain models.")
+        else:
+            with st.spinner("Running inference..."):
+                result = predictor.predict(question)
             
-            # Metrics Row
-            m1, m2 = st.columns(2)
-            
-            # Category Card
-            with m1:
-                st.markdown(f"""
-                <div class="dashboard-card">
-                    <div class="metric-label">Category</div>
-                    <div class="metric-value" style="font-size: 1.25rem;">{result['Category']}</div>
-                    <div style="margin-top: 8px;"><span class="badge badge-category">Technical</span></div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            # Difficulty Card
-            diff_color = 'badge-easy' if result['Difficulty'] == 'Easy' else 'badge-medium' if result['Difficulty'] == 'Medium' else 'badge-hard'
-            with m2:
-                st.markdown(f"""
-                <div class="dashboard-card">
-                    <div class="metric-label">Difficulty</div>
-                    <div class="metric-value">{result['Difficulty']}</div>
-                    <div style="margin-top: 8px;"><span class="badge {diff_color}">Level</span></div>
-                </div>
-                """, unsafe_allow_html=True)
-            
-            # Probability Section
-            prob_score = result['Probability'] * 100
-            prob_color = '#22c55e' if prob_score > 70 else '#f59e0b' if prob_score > 40 else '#ef4444'
-            
-            st.markdown(f"""
-            <div class="dashboard-card" style="margin-top: 1rem;">
-                <div class="metric-label">Appearance Probability</div>
-                <div style="display: flex; justify-content: space-between; align-items: end;">
-                    <div class="metric-value">{prob_score:.1f}%</div>
-                    <div style="color: {prob_color}; font-weight: 600;">{
-                        'High Likelihood' if prob_score > 70 else 'Moderate' if prob_score > 40 else 'Low Likelihood'
-                    }</div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" style="width: {prob_score}%; background-color: {prob_color};"></div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # Related Questions
-            st.markdown("###  Similar Questions")
-            related = predictor.get_related_questions(question)
-            
-            if related:
-                for idx, q in enumerate(related, 1):
+            with col_results:
+                st.markdown("###  Analysis Results")
+                
+                # Metrics Row
+                m1, m2 = st.columns(2)
+                
+                # Category Card
+                with m1:
                     st.markdown(f"""
-                    <div class="related-card">
-                        <div class="related-number">{idx}</div>
-                        <div>{q}</div>
+                    <div class="dashboard-card">
+                        <div class="metric-label">Category</div>
+                        <div class="metric-value" style="font-size: 1.25rem;">{result['Category']}</div>
+                        <div style="margin-top: 8px;"><span class="badge badge-category">Technical</span></div>
                     </div>
                     """, unsafe_allow_html=True)
-            else:
-                st.info("No similar questions found in database.")
+                
+                # Difficulty Card
+                diff_color = 'badge-easy' if result['Difficulty'] == 'Easy' else 'badge-medium' if result['Difficulty'] == 'Medium' else 'badge-hard'
+                with m2:
+                    st.markdown(f"""
+                    <div class="dashboard-card">
+                        <div class="metric-label">Difficulty</div>
+                        <div class="metric-value">{result['Difficulty']}</div>
+                        <div style="margin-top: 8px;"><span class="badge {diff_color}">Level</span></div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # Probability Section
+                prob_score = result['Probability'] * 100
+                prob_color = '#22c55e' if prob_score > 70 else '#f59e0b' if prob_score > 40 else '#ef4444'
+                
+                st.markdown(f"""
+                <div class="dashboard-card" style="margin-top: 1rem;">
+                    <div class="metric-label">Appearance Probability</div>
+                    <div style="display: flex; justify-content: space-between; align-items: end;">
+                        <div class="metric-value">{prob_score:.1f}%</div>
+                        <div style="color: {prob_color}; font-weight: 600;">{
+                            'High Likelihood' if prob_score > 70 else 'Moderate' if prob_score > 40 else 'Low Likelihood'
+                        }</div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: {prob_score}%; background-color: {prob_color};"></div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
-elif not analyze_btn:
+                # Related Questions
+                st.markdown("###  Similar Questions")
+                related = predictor.get_related_questions(question)
+                
+                if related:
+                    for idx, q in enumerate(related, 1):
+                        st.markdown(f"""
+                        <div class="related-card">
+                            <div class="related-number">{idx}</div>
+                            <div>{q}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.info("No similar questions found in database.")
+
+else:
     with col_results:
         st.info(" Enter a question and click 'Generate Analysis' to see results.")
