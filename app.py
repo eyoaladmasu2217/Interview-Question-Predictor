@@ -6,105 +6,177 @@ from src.train import train_models
 # Page Config
 st.set_page_config(
     page_title="Interview Question Predictor",
-    page_icon="🔮",
-    layout="centered"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Custom CSS for styling
+# Custom CSS for professional styling
 st.markdown("""
     <style>
-    .main {
-        background-color: #f5f7fa;
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Roboto', sans-serif;
+        color: #333;
     }
+    
+    .stApp {
+        background-color: #f8f9fa;
+    }
+    
+    h1, h2, h3 {
+        color: #1a237e; /* Navy Blue */
+        font-weight: 500;
+    }
+    
     .stButton>button {
-        background-color: #4CAF50;
+        background-color: #1a237e;
         color: white;
-        border-radius: 8px;
-        padding: 10px 24px;
-        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        width: 100%;
     }
+    
+    .stButton>button:hover {
+        background-color: #0d47a1;
+    }
+    
     .stTextArea>div>div>textarea {
-        border-radius: 10px;
-        border: 1px solid #ddd;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 10px;
     }
-    .prediction-card {
+    
+    .prediction-container {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .metric-card {
         background-color: white;
         padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin-top: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        flex: 1;
+        text-align: center;
+        border-top: 4px solid #1a237e;
     }
+    
     .metric-label {
-        font-size: 14px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
         color: #666;
+        margin-bottom: 8px;
     }
+    
     .metric-value {
         font-size: 24px;
-        font-weight: bold;
+        font-weight: 700;
         color: #333;
+    }
+    
+    .related-questions-box {
+        background-color: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        margin-top: 20px;
+    }
+    
+    .related-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+    
+    .related-item:last-child {
+        border-bottom: none;
+    }
+    
+    .sidebar-content {
+        padding: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Header
-st.title("🔮 Interview Question Predictor")
-st.markdown("Enter a software engineering interview question below to predict its **Category**, **Difficulty**, and **Probability** of appearing.")
-
-# Sidebar for training
+# Sidebar
 with st.sidebar:
-    st.header("Settings")
+    st.title("Control Panel")
+    st.markdown("Manage your model training and settings here.")
+    st.markdown("---")
     if st.button("Retrain Models"):
         with st.spinner("Training models..."):
             train_models()
-        st.success("Models trained successfully!")
+        st.success("Models trained successfully.")
 
-# Main Input
-question = st.text_area("Enter Question:", height=150, placeholder="e.g., Explain the difference between a process and a thread.")
+# Main Content
+st.title("Interview Question Predictor")
+st.markdown("### Analyze software engineering interview questions with AI.")
 
-if st.button("Predict"):
-    if question:
-        predictor = Predictor()
-        if not predictor.cat_model:
-             st.error("Models not found. Please click 'Retrain Models' in the sidebar first.")
-        else:
-            with st.spinner("Analyzing..."):
-                result = predictor.predict(question)
-            
-            # Display Results
-            st.markdown(f"""
-            <div class="prediction-card">
-                <div style="display: flex; justify-content: space-around; text-align: center;">
-                    <div>
+col1, col2 = st.columns([2, 1])
+
+with col1:
+    question = st.text_area("Input Question", height=150, placeholder="Type your interview question here...")
+    
+    if st.button("Analyze Question"):
+        if question:
+            predictor = Predictor()
+            if not predictor.cat_model:
+                 st.error("Models not found. Please retrain models from the sidebar.")
+            else:
+                with st.spinner("Processing..."):
+                    result = predictor.predict(question)
+                
+                # Display Metrics
+                st.markdown(f"""
+                <div class="prediction-container">
+                    <div class="metric-card">
                         <div class="metric-label">Category</div>
-                        <div class="metric-value" style="color: #2196F3;">{result['Category']}</div>
+                        <div class="metric-value">{result['Category']}</div>
                     </div>
-                    <div>
+                    <div class="metric-card">
                         <div class="metric-label">Difficulty</div>
                         <div class="metric-value" style="color: {
-                            '#4CAF50' if result['Difficulty'] == 'Easy' else 
-                            '#FF9800' if result['Difficulty'] == 'Medium' else 
-                            '#F44336'
+                            '#2e7d32' if result['Difficulty'] == 'Easy' else 
+                            '#f57c00' if result['Difficulty'] == 'Medium' else 
+                            '#c62828'
                         };">{result['Difficulty']}</div>
                     </div>
-                    <div>
+                    <div class="metric-card">
                         <div class="metric-label">Probability</div>
                         <div class="metric-value">{result['Probability']:.1%}</div>
                     </div>
                 </div>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # Related Questions
-            st.markdown("### 🔗 Related Questions")
-            related_questions = predictor.get_related_questions(question)
-            if related_questions:
-                for idx, q in enumerate(related_questions, 1):
-                    st.markdown(f"**{idx}.** {q}")
-            else:
-                st.info("No related questions found (models might need retraining).")
-    else:
-        st.warning("Please enter a question first.")
+                """, unsafe_allow_html=True)
+                
+                # Related Questions
+                st.markdown("### Related Questions")
+                related_questions = predictor.get_related_questions(question)
+                
+                st.markdown('<div class="related-questions-box">', unsafe_allow_html=True)
+                if related_questions:
+                    for idx, q in enumerate(related_questions, 1):
+                        st.markdown(f'<div class="related-item"><strong>{idx}.</strong> {q}</div>', unsafe_allow_html=True)
+                else:
+                    st.info("No related questions found.")
+                st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            st.warning("Please enter a question to analyze.")
 
-# Footer
-st.markdown("---")
-st.markdown("*Powered by Scikit-learn & Streamlit*")
+with col2:
+    st.markdown("""
+    ### About
+    This tool uses machine learning to classify interview questions and estimate their difficulty and likelihood of appearing in interviews.
+    
+    **Features:**
+    - Category Classification
+    - Difficulty Estimation
+    - Probability Scoring
+    - Similar Question Retrieval
+    """)
