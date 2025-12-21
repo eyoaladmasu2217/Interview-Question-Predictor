@@ -5,178 +5,268 @@ from src.train import train_models
 
 # Page Config
 st.set_page_config(
-    page_title="Interview Question Predictor",
+    page_title="Interview Predictor Pro",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for Premium Dashboard Look
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
+    /* Global Reset */
     html, body, [class*="css"] {
-        font-family: 'Roboto', sans-serif;
-        color: #333;
+        font-family: 'Inter', sans-serif;
+        color: #1f2937;
+        background-color: #f3f4f6;
     }
     
-    .stApp {
-        background-color: #f8f9fa;
-    }
-    
-    h1, h2, h3 {
-        color: #1a237e; /* Navy Blue */
-        font-weight: 500;
-    }
-    
-    .stButton>button {
-        background-color: #1a237e;
+    /* Header Styling */
+    .main-header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        padding: 2rem;
+        border-radius: 12px;
         color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 10px 20px;
-        font-weight: 500;
-        transition: background-color 0.3s;
-        width: 100%;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     
-    .stButton>button:hover {
-        background-color: #0d47a1;
+    .main-header h1 {
+        color: white !important;
+        font-weight: 700;
+        margin: 0;
+        font-size: 2.25rem;
     }
     
-    .stTextArea>div>div>textarea {
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        padding: 10px;
+    .main-header p {
+        color: #e5e7eb;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
     }
     
-    .prediction-container {
-        display: flex;
-        gap: 20px;
-        margin-top: 20px;
-        margin-bottom: 30px;
+    /* Card Styling */
+    .dashboard-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        height: 100%;
+        border: 1px solid #e5e7eb;
+        transition: transform 0.2s;
     }
     
-    .metric-card {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        flex: 1;
-        text-align: center;
-        border-top: 4px solid #1a237e;
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
     
+    /* Metric Styling */
     .metric-label {
-        font-size: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #666;
-        margin-bottom: 8px;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        margin-bottom: 0.5rem;
     }
     
     .metric-value {
-        font-size: 24px;
+        font-size: 1.875rem;
         font-weight: 700;
-        color: #333;
+        color: #111827;
     }
     
-    .related-questions-box {
-        background-color: white;
-        padding: 25px;
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .badge-easy { background-color: #d1fae5; color: #065f46; }
+    .badge-medium { background-color: #ffedd5; color: #9a3412; }
+    .badge-hard { background-color: #fee2e2; color: #991b1b; }
+    
+    .badge-category { background-color: #e0f2fe; color: #075985; }
+    
+    /* Progress Bar Container */
+    .progress-container {
+        width: 100%;
+        background-color: #e5e7eb;
+        border-radius: 9999px;
+        height: 12px;
+        margin-top: 10px;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        border-radius: 9999px;
+        transition: width 0.5s ease-in-out;
+    }
+    
+    /* Related Questions */
+    .related-card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
         border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        margin-top: 20px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        color: #374151;
+        display: flex;
+        align-items: center;
     }
     
-    .related-item {
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-        font-size: 15px;
+    .related-number {
+        background: #e5e7eb;
+        color: #4b5563;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 12px;
+        flex-shrink: 0;
     }
     
-    .related-item:last-child {
-        border-bottom: none;
+    /* Button Styling */
+    .stButton>button {
+        background-color: #2563eb;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     }
     
-    .sidebar-content {
-        padding: 20px;
+    .stButton>button:hover {
+        background-color: #1d4ed8;
+        box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.3);
+    }
+    
+    /* Input Area */
+    .stTextArea textarea {
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        padding: 1rem;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .stTextArea textarea:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
     </style>
     """, unsafe_allow_html=True)
 
 # Sidebar
 with st.sidebar:
-    st.title("Control Panel")
-    st.markdown("Manage your model training and settings here.")
-    st.markdown("---")
-    if st.button("Retrain Models"):
-        with st.spinner("Training models..."):
+    st.markdown("### ⚙️ Settings")
+    st.info("Model Status: Active")
+    if st.button("Retrain System"):
+        with st.spinner("Optimizing models..."):
             train_models()
-        st.success("Models trained successfully.")
-
-# Main Content
-st.title("Interview Question Predictor")
-st.markdown("### Analyze software engineering interview questions with AI.")
-
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    question = st.text_area("Input Question", height=150, placeholder="Type your interview question here...")
+        st.success("System Updated")
     
-    if st.button("Analyze Question"):
-        if question:
-            predictor = Predictor()
-            if not predictor.cat_model:
-                 st.error("Models not found. Please retrain models from the sidebar.")
-            else:
-                with st.spinner("Processing..."):
-                    result = predictor.predict(question)
-                
-                # Display Metrics
+    st.markdown("---")
+    st.markdown("### 📊 Dataset Stats")
+    # Placeholder stats - in a real app, read from df
+    st.metric("Total Questions", "201")
+    st.metric("Categories", "5")
+
+# Header
+st.markdown("""
+    <div class="main-header">
+        <h1>Interview Predictor Pro</h1>
+        <p>Advanced AI analytics for software engineering interview preparation.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Main Layout
+col_input, col_results = st.columns([1, 1.2])
+
+with col_input:
+    st.markdown("### Input Analysis")
+    question = st.text_area("Enter technical question", height=200, placeholder="e.g., Explain the difference between REST and GraphQL...")
+    
+    analyze_btn = st.button("Generate Analysis", use_container_width=True)
+
+if analyze_btn and question:
+    predictor = Predictor()
+    if not predictor.cat_model:
+         st.error("System initialization required. Please retrain models.")
+    else:
+        with st.spinner("Running inference..."):
+            result = predictor.predict(question)
+        
+        with col_results:
+            st.markdown("###  Analysis Results")
+            
+            # Metrics Row
+            m1, m2 = st.columns(2)
+            
+            # Category Card
+            with m1:
                 st.markdown(f"""
-                <div class="prediction-container">
-                    <div class="metric-card">
-                        <div class="metric-label">Category</div>
-                        <div class="metric-value">{result['Category']}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Difficulty</div>
-                        <div class="metric-value" style="color: {
-                            '#2e7d32' if result['Difficulty'] == 'Easy' else 
-                            '#f57c00' if result['Difficulty'] == 'Medium' else 
-                            '#c62828'
-                        };">{result['Difficulty']}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Probability</div>
-                        <div class="metric-value">{result['Probability']:.1%}</div>
-                    </div>
+                <div class="dashboard-card">
+                    <div class="metric-label">Category</div>
+                    <div class="metric-value" style="font-size: 1.25rem;">{result['Category']}</div>
+                    <div style="margin-top: 8px;"><span class="badge badge-category">Technical</span></div>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # Related Questions
-                st.markdown("### Related Questions")
-                related_questions = predictor.get_related_questions(question)
-                
-                st.markdown('<div class="related-questions-box">', unsafe_allow_html=True)
-                if related_questions:
-                    for idx, q in enumerate(related_questions, 1):
-                        st.markdown(f'<div class="related-item"><strong>{idx}.</strong> {q}</div>', unsafe_allow_html=True)
-                else:
-                    st.info("No related questions found.")
-                st.markdown('</div>', unsafe_allow_html=True)
-        else:
-            st.warning("Please enter a question to analyze.")
+            
+            # Difficulty Card
+            diff_color = 'badge-easy' if result['Difficulty'] == 'Easy' else 'badge-medium' if result['Difficulty'] == 'Medium' else 'badge-hard'
+            with m2:
+                st.markdown(f"""
+                <div class="dashboard-card">
+                    <div class="metric-label">Difficulty</div>
+                    <div class="metric-value">{result['Difficulty']}</div>
+                    <div style="margin-top: 8px;"><span class="badge {diff_color}">Level</span></div>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Probability Section
+            prob_score = result['Probability'] * 100
+            prob_color = '#22c55e' if prob_score > 70 else '#f59e0b' if prob_score > 40 else '#ef4444'
+            
+            st.markdown(f"""
+            <div class="dashboard-card" style="margin-top: 1rem;">
+                <div class="metric-label">Appearance Probability</div>
+                <div style="display: flex; justify-content: space-between; align-items: end;">
+                    <div class="metric-value">{prob_score:.1f}%</div>
+                    <div style="color: {prob_color}; font-weight: 600;">{
+                        'High Likelihood' if prob_score > 70 else 'Moderate' if prob_score > 40 else 'Low Likelihood'
+                    }</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: {prob_score}%; background-color: {prob_color};"></div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    ### About
-    This tool uses machine learning to classify interview questions and estimate their difficulty and likelihood of appearing in interviews.
-    
-    **Features:**
-    - Category Classification
-    - Difficulty Estimation
-    - Probability Scoring
-    - Similar Question Retrieval
-    """)
+            # Related Questions
+            st.markdown("###  Similar Questions")
+            related = predictor.get_related_questions(question)
+            
+            if related:
+                for idx, q in enumerate(related, 1):
+                    st.markdown(f"""
+                    <div class="related-card">
+                        <div class="related-number">{idx}</div>
+                        <div>{q}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("No similar questions found in database.")
+
+elif not analyze_btn:
+    with col_results:
+        st.info(" Enter a question and click 'Generate Analysis' to see results.")
