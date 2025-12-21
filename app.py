@@ -93,6 +93,15 @@ if st.button("Predict"):
                 </div>
             </div>
             """, unsafe_allow_html=True)
+            
+            # Related Questions
+            st.markdown("### 🔗 Related Questions")
+            related_questions = predictor.get_related_questions(question)
+            if related_questions:
+                for idx, q in enumerate(related_questions, 1):
+                    st.markdown(f"**{idx}.** {q}")
+            else:
+                st.info("No related questions found (models might need retraining).")
     else:
         st.warning("Please enter a question first.")
 

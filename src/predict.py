@@ -4,9 +4,9 @@ import os
 class Predictor:
     def __init__(self, model_dir='models'):
         self.model_dir = model_dir
-        self.cat_model = None
-        self.diff_model = None
-        self.prob_model = None
+        self.nn_vectorizer = None
+        self.nn_model = None
+        self.df = None
         self.load_models()
 
     def load_models(self):
@@ -14,6 +14,12 @@ class Predictor:
             self.cat_model = joblib.load(os.path.join(self.model_dir, 'category_model.pkl'))
             self.diff_model = joblib.load(os.path.join(self.model_dir, 'difficulty_model.pkl'))
             self.prob_model = joblib.load(os.path.join(self.model_dir, 'probability_model.pkl'))
+            
+            # Load NN artifacts
+            self.nn_vectorizer = joblib.load(os.path.join(self.model_dir, 'nn_vectorizer.pkl'))
+            self.nn_model = joblib.load(os.path.join(self.model_dir, 'nn_model.pkl'))
+            self.df = joblib.load(os.path.join(self.model_dir, 'df.pkl'))
+            
         except FileNotFoundError:
             print("Models not found. Please train the models first.")
 
@@ -33,3 +39,20 @@ class Predictor:
             'Difficulty': difficulty,
             'Probability': probability
         }
+
+    def get_related_questions(self, question_text, top_k=10):
+        if not self.nn_model or not self.nn_vectorizer or self.df is None:
+            return []
+        
+        # Vectorize input
+        X_vec = self.nn_vectorizer.transform([question_text])
+        
+        # Find neighbors
+        distances, indices = self.nn_model.kneighbors(X_vec, n_neighbors=top_k)
+        
+        # Retrieve questions
+        related_questions = []
+        for idx in indices[0]:
+            related_questions.append(self.df.iloc[idx]['Question'])
+            
+        return related_questions

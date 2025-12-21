@@ -69,6 +69,16 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     prob_pipeline.fit(X_train, y_prob_train)
     print("Probability Regressor MSE:", mean_squared_error(y_prob_test, prob_pipeline.predict(X_test)))
 
+    # 4. Nearest Neighbors for Related Questions
+    print("Training Nearest Neighbors Model...")
+    # We need a standalone vectorizer for this to ensure we can transform input separately
+    nn_vectorizer = TfidfVectorizer(stop_words='english')
+    X_tfidf = nn_vectorizer.fit_transform(X)
+    
+    from sklearn.neighbors import NearestNeighbors
+    nn_model = NearestNeighbors(n_neighbors=10, metric='cosine')
+    nn_model.fit(X_tfidf)
+
     # Save Models
     import os
     if not os.path.exists(model_dir):
@@ -78,6 +88,11 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     joblib.dump(cat_pipeline, f'{model_dir}/category_model.pkl')
     joblib.dump(diff_pipeline, f'{model_dir}/difficulty_model.pkl')
     joblib.dump(prob_pipeline, f'{model_dir}/probability_model.pkl')
+    
+    # Save NN artifacts
+    joblib.dump(nn_vectorizer, f'{model_dir}/nn_vectorizer.pkl')
+    joblib.dump(nn_model, f'{model_dir}/nn_model.pkl')
+    joblib.dump(df, f'{model_dir}/df.pkl') # Save data to retrieve questions
     print("Done.")
 
 if __name__ == "__main__":
