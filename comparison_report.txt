@@ -1,0 +1,17 @@
+
+ML Algorithm Comparison Report
+==============================
+
+1. Category Classification
+--------------------------
+Random Forest Accuracy: 0.4250
+SVM Accuracy:           0.5500
+>> Winner: SVM
+
+2. Difficulty Classification
+----------------------------
+Random Forest Accuracy: 0.6500
+SVM Accuracy:           0.7250
+>> Winner: SVM
+
+Note: The best performing models have been automatically saved and will be used by the application.

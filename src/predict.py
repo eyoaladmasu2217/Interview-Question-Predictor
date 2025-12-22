@@ -40,7 +40,7 @@ class Predictor:
             'Probability': probability
         }
 
-    def get_related_questions(self, question_text, top_k=10):
+    def get_related_questions(self, question_text, top_k=20):
         if not self.nn_model or not self.nn_vectorizer or self.df is None:
             return []
         

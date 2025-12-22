@@ -35,33 +35,71 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     y_probability = df['Probability']
 
     # Split data
-    # We use the same split for all for simplicity, or we could split separately. 
-    # Since inputs are the same, same split is fine.
+
     X_train, X_test, y_cat_train, y_cat_test, y_diff_train, y_diff_test, y_prob_train, y_prob_test = train_test_split(
         X, y_category, y_difficulty, y_probability, test_size=0.2, random_state=42
     )
 
-    # Pipelines
-    # 1. Category Classifier
-    print("Training Category Classifier...")
-    cat_pipeline = Pipeline([
+
+    # 1. Category Classifier Comparison
+    print("\n--- Training Category Classifiers ---")
+    # Random Forest
+    rf_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
         ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
     ])
-    cat_pipeline.fit(X_train, y_cat_train)
-    print("Category Classifier Score:", cat_pipeline.score(X_test, y_cat_test))
+    rf_cat_pipeline.fit(X_train, y_cat_train)
+    rf_score = rf_cat_pipeline.score(X_test, y_cat_test)
+    print(f"Random Forest Category Accuracy: {rf_score:.4f}")
 
-    # 2. Difficulty Classifier
-    print("Training Difficulty Classifier...")
-    diff_pipeline = Pipeline([
+    # SVM
+    from sklearn.svm import LinearSVC
+    svm_cat_pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(stop_words='english')),
+        ('clf', LinearSVC(random_state=42, dual='auto'))
+    ])
+    svm_cat_pipeline.fit(X_train, y_cat_train)
+    svm_score = svm_cat_pipeline.score(X_test, y_cat_test)
+    print(f"SVM Category Accuracy:           {svm_score:.4f}")
+
+    # Select Best Category Model
+    if svm_score > rf_score:
+        print(">> Selecting SVM for Category Model")
+        best_cat_model = svm_cat_pipeline
+    else:
+        print(">> Selecting Random Forest for Category Model")
+        best_cat_model = rf_cat_pipeline
+
+    # 2. Difficulty Classifier Comparison
+    print("\n--- Training Difficulty Classifiers ---")
+    # Random Forest
+    rf_diff_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
         ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
     ])
-    diff_pipeline.fit(X_train, y_diff_train)
-    print("Difficulty Classifier Score:", diff_pipeline.score(X_test, y_diff_test))
+    rf_diff_pipeline.fit(X_train, y_diff_train)
+    rf_diff_score = rf_diff_pipeline.score(X_test, y_diff_test)
+    print(f"Random Forest Difficulty Accuracy: {rf_diff_score:.4f}")
 
-    # 3. Probability Regressor
-    print("Training Probability Regressor...")
+    # SVM
+    svm_diff_pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(stop_words='english')),
+        ('clf', LinearSVC(random_state=42, dual='auto'))
+    ])
+    svm_diff_pipeline.fit(X_train, y_diff_train)
+    svm_diff_score = svm_diff_pipeline.score(X_test, y_diff_test)
+    print(f"SVM Difficulty Accuracy:           {svm_diff_score:.4f}")
+
+    # Select Best Difficulty Model
+    if svm_diff_score > rf_diff_score:
+        print(">> Selecting SVM for Difficulty Model")
+        best_diff_model = svm_diff_pipeline
+    else:
+        print(">> Selecting Random Forest for Difficulty Model")
+        best_diff_model = rf_diff_pipeline
+
+    # 3. Probability Regressor (Keeping RF for now as requested comparison was mainly for algos)
+    print("\n--- Training Probability Regressor ---")
     prob_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
         ('reg', RandomForestRegressor(n_estimators=100, random_state=42))
@@ -70,13 +108,13 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     print("Probability Regressor MSE:", mean_squared_error(y_prob_test, prob_pipeline.predict(X_test)))
 
     # 4. Nearest Neighbors for Related Questions
-    print("Training Nearest Neighbors Model...")
-    # We need a standalone vectorizer for this to ensure we can transform input separately
+    print("\n--- Training Nearest Neighbors Model ---")
+    # vectorizer for this to ensure we can transform input separately
     nn_vectorizer = TfidfVectorizer(stop_words='english')
     X_tfidf = nn_vectorizer.fit_transform(X)
     
     from sklearn.neighbors import NearestNeighbors
-    nn_model = NearestNeighbors(n_neighbors=10, metric='cosine')
+    nn_model = NearestNeighbors(n_neighbors=20, metric='cosine') # Default to 20 neighbors as requested
     nn_model.fit(X_tfidf)
 
     # Save Models
@@ -84,9 +122,9 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     
-    print(f"Saving models to {model_dir}...")
-    joblib.dump(cat_pipeline, f'{model_dir}/category_model.pkl')
-    joblib.dump(diff_pipeline, f'{model_dir}/difficulty_model.pkl')
+    print(f"\nSaving best models to {model_dir}...")
+    joblib.dump(best_cat_model, f'{model_dir}/category_model.pkl')
+    joblib.dump(best_diff_model, f'{model_dir}/difficulty_model.pkl')
     joblib.dump(prob_pipeline, f'{model_dir}/probability_model.pkl')
     
     # Save NN artifacts
@@ -94,6 +132,29 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     joblib.dump(nn_model, f'{model_dir}/nn_model.pkl')
     joblib.dump(df, f'{model_dir}/df.pkl') # Save data to retrieve questions
     print("Done.")
+
+    # Save Comparison Report
+    report = f"""
+ML Algorithm Comparison Report
+==============================
+
+1. Category Classification
+--------------------------
+Random Forest Accuracy: {rf_score:.4f}
+SVM Accuracy:           {svm_score:.4f}
+>> Winner: {'SVM' if svm_score > rf_score else 'Random Forest'}
+
+2. Difficulty Classification
+----------------------------
+Random Forest Accuracy: {rf_diff_score:.4f}
+SVM Accuracy:           {svm_diff_score:.4f}
+>> Winner: {'SVM' if svm_diff_score > rf_diff_score else 'Random Forest'}
+
+Note: The best performing models have been automatically saved and will be used by the application.
+"""
+    print(report)
+    with open('comparison_report.txt', 'w') as f:
+        f.write(report)
 
 if __name__ == "__main__":
     train_models()
