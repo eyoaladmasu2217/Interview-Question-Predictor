@@ -2,6 +2,7 @@ import streamlit as st
 import os
 from src.predict import Predictor
 from src.train import train_models
+from src.utils import validate_question, clean_text
 
 # Page Config
 st.set_page_config(
@@ -199,16 +200,18 @@ with col_input:
     analyze_btn = st.button("Generate Analysis", use_container_width=True)
 
 if analyze_btn:
-    if not question:
+    is_valid, error_msg = validate_question(question)
+    if not is_valid:
         with col_results:
-            st.warning("Please enter a question to generate analysis.")
+            st.warning(f"⚠️ {error_msg}")
     else:
         predictor = Predictor()
         if not predictor.cat_model:
-             st.error("System initialization required. Please retrain models.")
+            st.error("System initialization required. Please retrain models.")
         else:
+            cleaned_question = clean_text(question)
             with st.spinner("Running inference..."):
-                result = predictor.predict(question)
+                result = predictor.predict(cleaned_question)
             
             with col_results:
                 st.markdown("###  Analysis Results")
