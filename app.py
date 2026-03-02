@@ -5,7 +5,7 @@ from src.train import train_models
 
 # Page Config
 st.set_page_config(
-    page_title="Interview Predictor and Reccomendation",
+    page_title="Interview Predictor and Recommendation",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -184,8 +184,8 @@ with st.sidebar:
 # Header
 st.markdown("""
     <div class="main-header">
-        <h1>Interview Predictor and Reccomendation</h1>
-        <p>AI analytics for software engineering interview preparation.</p>
+        <h1>Interview Predictor and Recommendation</h1>
+        <p>AI-powered analytics for software engineering interview preparation.</p>
     </div>
 """, unsafe_allow_html=True)
 
