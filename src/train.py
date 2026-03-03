@@ -1,3 +1,5 @@
+import json
+import os
 import pandas as pd
 import numpy as np
 import joblib
@@ -5,6 +7,7 @@ import logging
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report, mean_squared_error
 
@@ -53,6 +56,8 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
 
     # 1. Category Classifier Comparison
     logger.info("--- Training Category Classifiers ---")
+    from sklearn.svm import LinearSVC
+
     # Random Forest
     rf_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
@@ -63,7 +68,6 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     logger.info(f"Random Forest Category Accuracy: {rf_score:.4f}")
 
     # SVM
-    from sklearn.svm import LinearSVC
     svm_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
         ('clf', LinearSVC(random_state=42, dual='auto'))
@@ -72,13 +76,22 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     svm_score = svm_cat_pipeline.score(X_test, y_cat_test)
     logger.info(f"SVM Category Accuracy:           {svm_score:.4f}")
 
+    # Logistic Regression
+    lr_cat_pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(stop_words='english')),
+        ('clf', LogisticRegression(max_iter=1000, random_state=42))
+    ])
+    lr_cat_pipeline.fit(X_train, y_cat_train)
+    lr_score = lr_cat_pipeline.score(X_test, y_cat_test)
+    logger.info(f"Logistic Regression Category Accuracy: {lr_score:.4f}")
+
     # Select Best Category Model
-    if svm_score > rf_score:
-        logger.info(">> Selecting SVM for Category Model")
-        best_cat_model = svm_cat_pipeline
-    else:
-        logger.info(">> Selecting Random Forest for Category Model")
-        best_cat_model = rf_cat_pipeline
+    cat_scores = {'Random Forest': (rf_score, rf_cat_pipeline),
+                  'SVM': (svm_score, svm_cat_pipeline),
+                  'Logistic Regression': (lr_score, lr_cat_pipeline)}
+    best_cat_name = max(cat_scores, key=lambda k: cat_scores[k][0])
+    best_cat_model = cat_scores[best_cat_name][1]
+    logger.info(f">> Selecting {best_cat_name} for Category Model")
 
     # 2. Difficulty Classifier Comparison
     logger.info("--- Training Difficulty Classifiers ---")
@@ -100,13 +113,22 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     svm_diff_score = svm_diff_pipeline.score(X_test, y_diff_test)
     logger.info(f"SVM Difficulty Accuracy:           {svm_diff_score:.4f}")
 
+    # Logistic Regression
+    lr_diff_pipeline = Pipeline([
+        ('tfidf', TfidfVectorizer(stop_words='english')),
+        ('clf', LogisticRegression(max_iter=1000, random_state=42))
+    ])
+    lr_diff_pipeline.fit(X_train, y_diff_train)
+    lr_diff_score = lr_diff_pipeline.score(X_test, y_diff_test)
+    logger.info(f"Logistic Regression Difficulty Accuracy: {lr_diff_score:.4f}")
+
     # Select Best Difficulty Model
-    if svm_diff_score > rf_diff_score:
-        logger.info(">> Selecting SVM for Difficulty Model")
-        best_diff_model = svm_diff_pipeline
-    else:
-        logger.info(">> Selecting Random Forest for Difficulty Model")
-        best_diff_model = rf_diff_pipeline
+    diff_scores = {'Random Forest': (rf_diff_score, rf_diff_pipeline),
+                   'SVM': (svm_diff_score, svm_diff_pipeline),
+                   'Logistic Regression': (lr_diff_score, lr_diff_pipeline)}
+    best_diff_name = max(diff_scores, key=lambda k: diff_scores[k][0])
+    best_diff_model = diff_scores[best_diff_name][1]
+    logger.info(f">> Selecting {best_diff_name} for Difficulty Model")
 
     # 3. Probability Regressor
     logger.info("--- Training Probability Regressor ---")
@@ -143,22 +165,28 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     joblib.dump(df, f'{model_dir}/df.pkl')
     logger.info("All models saved successfully.")
 
-    # Save Comparison Report
+    # Save Comparison Report (text)
     report = f"""
 ML Algorithm Comparison Report
 ==============================
 
 1. Category Classification
 --------------------------
-Random Forest Accuracy: {rf_score:.4f}
-SVM Accuracy:           {svm_score:.4f}
->> Winner: {'SVM' if svm_score > rf_score else 'Random Forest'}
+Random Forest Accuracy:      {rf_score:.4f}
+SVM Accuracy:                {svm_score:.4f}
+Logistic Regression Accuracy:{lr_score:.4f}
+>> Winner: {best_cat_name}
 
 2. Difficulty Classification
 ----------------------------
-Random Forest Accuracy: {rf_diff_score:.4f}
-SVM Accuracy:           {svm_diff_score:.4f}
->> Winner: {'SVM' if svm_diff_score > rf_diff_score else 'Random Forest'}
+Random Forest Accuracy:      {rf_diff_score:.4f}
+SVM Accuracy:                {svm_diff_score:.4f}
+Logistic Regression Accuracy:{lr_diff_score:.4f}
+>> Winner: {best_diff_name}
+
+3. Probability Regression
+--------------------------
+Random Forest MSE: {mse:.6f}
 
 Note: The best performing models have been automatically saved and will be used by the application.
 """
@@ -166,6 +194,26 @@ Note: The best performing models have been automatically saved and will be used 
     with open('comparison_report.txt', 'w') as f:
         f.write(report)
     logger.info("Comparison report written to comparison_report.txt")
+
+    # Save machine-readable JSON metrics
+    metrics = {
+        'category': {
+            'random_forest': round(rf_score, 4),
+            'svm': round(svm_score, 4),
+            'logistic_regression': round(lr_score, 4),
+            'winner': best_cat_name,
+        },
+        'difficulty': {
+            'random_forest': round(rf_diff_score, 4),
+            'svm': round(svm_diff_score, 4),
+            'logistic_regression': round(lr_diff_score, 4),
+            'winner': best_diff_name,
+        },
+        'probability_mse': round(mse, 6),
+    }
+    with open('model_metrics.json', 'w') as jf:
+        json.dump(metrics, jf, indent=2)
+    logger.info("Model metrics saved to model_metrics.json")
 
 if __name__ == "__main__":
     train_models()
