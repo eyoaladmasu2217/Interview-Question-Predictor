@@ -457,12 +457,26 @@ with tab_batch:
 
                     # Export
                     csv_out = results_df.to_csv(index=False).encode('utf-8')
-                    st.download_button(
-                        label="⬇️ Download Full Results as CSV",
-                        data=csv_out,
-                        file_name="batch_predictions.csv",
-                        mime="text/csv",
-                        key="export_batch",
-                    )
+                    json_out = results_df.to_json(orient="records").encode('utf-8')
+                    
+                    e_col1, e_col2 = st.columns(2)
+                    with e_col1:
+                        st.download_button(
+                            label="⬇️ Download Full Results as CSV",
+                            data=csv_out,
+                            file_name="batch_predictions.csv",
+                            mime="text/csv",
+                            key="export_batch_csv",
+                            use_container_width=True
+                        )
+                    with e_col2:
+                        st.download_button(
+                            label="⬇️ Download Full Results as JSON",
+                            data=json_out,
+                            file_name="batch_predictions.json",
+                            mime="application/json",
+                            key="export_batch_json",
+                            use_container_width=True
+                        )
                 else:
                     st.info("No valid results were produced. Check your input questions.")
