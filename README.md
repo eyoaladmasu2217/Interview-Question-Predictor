@@ -15,7 +15,7 @@
 | **Keyword Highlights** | Extracts the top key concepts detected in your question |
 | **Single Analyser** | Analyse one question at a time with rich visual output |
 | **Batch Analyser** | Upload a CSV or paste multiple questions to get bulk predictions |
-| **CSV Export** | Download single or batch predictions as a tidy CSV |
+| **Export Options** | Download single or batch predictions as a tidy CSV or JSON file |
 | **Model Auto-Selection** | Trains Random Forest, SVM, and Logistic Regression — picks the best automatically |
 | **Model Evaluation** | Standalone `src/evaluator.py` script for detailed metrics reporting |
 | **Prediction History** | Sidebar tracks your last 5 predictions |
@@ -109,7 +109,7 @@ Open your browser to `http://localhost:8501`.
 1. Type or paste a technical interview question.
 2. Click **Generate Analysis**.
 3. View Category (with confidence bars), Difficulty (with confidence bars), Appearance Probability, Question Type badge, and Key Concepts.
-4. Optionally **Export Result as CSV**.
+4. Optionally **Export Result as CSV** or **Export Result as JSON**.
 5. Browse similar questions pulled from the training corpus.
 
 ### Batch Analyser tab
@@ -118,7 +118,7 @@ Open your browser to `http://localhost:8501`.
 2. Click **▶ Run Batch Analysis**.
 3. View summary stats (top category, average probability, most common difficulty).
 4. Browse the full results table.
-5. Click **Download Full Results as CSV**.
+5. Click **Download Full Results as CSV** or **JSON**.
 
 ---
 
