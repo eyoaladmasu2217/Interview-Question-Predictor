@@ -317,13 +317,27 @@ with tab_single:
                         'Keywords':            ', '.join(keywords),
                     }])
                     csv_bytes = export_df.to_csv(index=False).encode('utf-8')
-                    st.download_button(
-                        label="⬇️ Export Result as CSV",
-                        data=csv_bytes,
-                        file_name="prediction_result.csv",
-                        mime="text/csv",
-                        key="export_single",
-                    )
+                    json_bytes = export_df.to_json(orient="records").encode('utf-8')
+                    
+                    e_col1, e_col2 = st.columns(2)
+                    with e_col1:
+                        st.download_button(
+                            label="⬇️ Export Result as CSV",
+                            data=csv_bytes,
+                            file_name="prediction_result.csv",
+                            mime="text/csv",
+                            key="export_single_csv",
+                            use_container_width=True
+                        )
+                    with e_col2:
+                        st.download_button(
+                            label="⬇️ Export Result as JSON",
+                            data=json_bytes,
+                            file_name="prediction_result.json",
+                            mime="application/json",
+                            key="export_single_json",
+                            use_container_width=True
+                        )
 
                     # ── Similar Questions ─────────────────────────────────────
                     st.markdown("### 🔗 Similar Questions")
