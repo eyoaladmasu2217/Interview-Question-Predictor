@@ -113,8 +113,12 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("### 📊 Dataset Stats")
+    @st.cache_data(show_spinner=False)
+    def load_dataset():
+        return pd.read_csv('data/Software Questions.csv', encoding='utf-8')
+
     try:
-        _df = pd.read_csv('data/Software Questions.csv', encoding='utf-8')
+        _df = load_dataset()
         st.metric("Total Questions",  len(_df))
         st.metric("Categories",       _df['Category'].nunique()   if 'Category'   in _df.columns else "–")
         st.metric("Difficulty Levels", _df['Difficulty'].nunique() if 'Difficulty' in _df.columns else "–")
