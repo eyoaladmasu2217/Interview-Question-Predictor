@@ -102,6 +102,10 @@ st.markdown("""
 if 'history' not in st.session_state:
     st.session_state['history'] = []
 
+@st.cache_resource(show_spinner=False)
+def get_predictor():
+    return Predictor()
+
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### ⚙️ Settings")
@@ -130,7 +134,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### 🤖 Active Models")
     try:
-        _pred = Predictor()
+        _pred = get_predictor()
         info = _pred.get_model_info()
         for k, v in info.items():
             st.caption(f"**{k}**: {v}")
@@ -193,7 +197,7 @@ with tab_single:
             with col_results:
                 st.warning(f"⚠️ {error_msg}")
         else:
-            predictor = Predictor()
+            predictor = get_predictor()
             if not predictor.cat_model:
                 st.error("System initialisation required. Please retrain models.")
             else:
@@ -408,7 +412,7 @@ with tab_batch:
         if not questions_list:
             st.warning("Please upload a CSV or paste at least one question.")
         else:
-            predictor = Predictor()
+            predictor = get_predictor()
             if not predictor.cat_model:
                 st.error("Models not loaded. Please retrain from the sidebar first.")
             else:
