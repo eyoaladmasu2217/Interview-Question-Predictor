@@ -102,6 +102,8 @@ def detect_question_type(text: str) -> str:
         return 'Comparison'
     if re.search(r'\b(why does|find the bug|debug|fix|error|exception|mistake)\b', lower):
         return 'Debugging'
+    if re.search(r'\b(tell me about a time|describe a situation|how do you handle|give an example|conflict|teamwork|leadership)\b', lower):
+        return 'Behavioral'
     if re.search(r'\b(what is|what are|explain|define|describe|tell me about)\b', lower):
         return 'Conceptual'
     return 'General'
