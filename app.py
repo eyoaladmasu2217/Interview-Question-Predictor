@@ -76,7 +76,7 @@ st.markdown("""
         display: flex; align-items: center;
     }
     .related-number {
-        background: #e5e7eb; color: #4b5563; width: 24px; height: 24px;
+        background: #e5e7eb; color: #374151; width: 24px; height: 24px;
         border-radius: 50%; display: flex; align-items: center; justify-content: center;
         font-size: 0.75rem; font-weight: 600; margin-right: 12px; flex-shrink: 0;
     }
