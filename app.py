@@ -31,7 +31,7 @@ st.markdown("""
         border-radius: 14px;
         color: white;
         margin-bottom: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
     }
     .main-header h1 { color: white !important; font-weight: 700; margin: 0; font-size: 2.25rem; }
     .main-header p  { color: #e5e7eb; margin-top: 0.5rem; font-size: 1.1rem; }
