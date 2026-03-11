@@ -20,7 +20,7 @@ st.markdown("""
 
     html, body, [class*="css"] {
         font-family: 'Inter', system-ui, sans-serif;
-        color: #1f2937;
+        color: #111827;
         background-color: #f3f4f6;
     }
 
