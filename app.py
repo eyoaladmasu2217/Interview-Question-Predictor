@@ -19,7 +19,7 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
     html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         color: #1f2937;
         background-color: #f3f4f6;
     }
