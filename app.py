@@ -71,7 +71,7 @@ st.markdown("""
 
     /* Related question cards */
     .related-card {
-        background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
+        background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px;
         padding: 1rem; margin-bottom: 0.75rem; font-size: 0.95rem; color: #374151;
         display: flex; align-items: center;
     }
