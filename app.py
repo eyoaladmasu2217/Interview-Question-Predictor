@@ -66,7 +66,7 @@ st.markdown("""
     .badge-keyword    { background-color: #fef9c3; color: #713f12; margin: 2px; display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 0.8rem; }
 
     /* Progress bar */
-    .progress-container { width: 100%; background-color: #e5e7eb; border-radius: 9999px; height: 12px; margin-top: 10px; }
+    .progress-container { width: 100%; background-color: #e5e7eb; border-radius: 9999px; height: 10px; margin-top: 10px; }
     .progress-bar       { height: 100%; border-radius: 9999px; transition: width 0.5s ease-in-out; }
 
     /* Related question cards */
