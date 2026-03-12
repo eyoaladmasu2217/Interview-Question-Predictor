@@ -157,7 +157,12 @@ with st.sidebar:
     # Recent prediction history
     if st.session_state['history']:
         st.markdown("---")
-        st.markdown("### 🕑 Recent Predictions")
+        col1, col2 = st.columns([7, 3])
+        with col1: st.markdown("### 🕑 Recent Predictions")
+        with col2: 
+            if st.button("Clear", key="clr_hist"):
+                st.session_state['history'] = []
+                st.rerun()
         for item in reversed(st.session_state['history'][-5:]):
             st.markdown(
                 f"<small><b>{html.escape(str(item['category']))}</b> · {html.escape(str(item['difficulty']))} · "
