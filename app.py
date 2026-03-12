@@ -126,6 +126,9 @@ with st.sidebar:
     try:
         _df = load_dataset()
         st.metric("Total Questions",  len(_df))
+        if 'Question' in _df.columns:
+            avg_len = int(_df['Question'].fillna("").str.split().str.len().mean())
+            st.metric("Avg Words/Question", avg_len)
         st.metric("Categories",       _df['Category'].nunique()   if 'Category'   in _df.columns else "–")
         st.metric("Difficulty Levels", _df['Difficulty'].nunique() if 'Difficulty' in _df.columns else "–")
     except Exception:
