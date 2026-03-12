@@ -212,6 +212,8 @@ with tab_single:
 
                 with col_results:
                     st.markdown("### Analysis Results")
+                    count_cols = st.columns(4)
+                    count_cols[0].metric("Word Count", len(question.split()))
 
                     # ── Question Type badge ───────────────────────────────────
                     q_type = detect_question_type(question)
