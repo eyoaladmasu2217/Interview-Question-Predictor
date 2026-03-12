@@ -359,7 +359,7 @@ with tab_single:
                             st.markdown(f"""
                             <div class="related-card">
                                 <div class="related-number">{idx}</div>
-                                <div>{q}</div>
+                                <div>{html.escape(q)}</div>
                             </div>
                             """, unsafe_allow_html=True)
                     else:
