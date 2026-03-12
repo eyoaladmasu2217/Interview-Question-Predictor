@@ -393,6 +393,7 @@ with tab_batch:
         "Probability for each question and let you download the results."
     )
 
+    st.download_button("📄 Download Sample Template", "Question\nWhat is Python?\nExplain OOP.".encode('utf-8'), "sample_template.csv", "text/csv", key="sample_dl")
     b_col1, b_col2 = st.columns([1, 1])
 
     with b_col1:
