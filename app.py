@@ -58,7 +58,7 @@ st.markdown("""
     .metric-value { font-size: 1.875rem; font-weight: 700; color: #111827; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); }
 
     /* Badges */
-    .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; }
+    .badge { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 600; }
     .badge-easy       { background-color: #d1fae5; color: #065f46; }
     .badge-medium     { background-color: #ffedd5; color: #9a3412; }
     .badge-hard       { background-color: #fee2e2; color: #991b1b; }
