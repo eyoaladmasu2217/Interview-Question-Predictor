@@ -314,7 +314,7 @@ with tab_single:
                     keywords = extract_keywords(question, top_n=7)
                     if keywords:
                         kw_chips = "".join(
-                            f"<span class='badge-keyword'>🔑 {kw}</span>" for kw in keywords
+                            f"<span class='badge-keyword'>🔑 {html.escape(str(kw))}</span>" for kw in keywords
                         )
                         st.markdown(f"""
                         <div class="dashboard-card" style="margin-top:1rem">
