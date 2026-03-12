@@ -159,7 +159,7 @@ with st.sidebar:
         st.markdown("### 🕑 Recent Predictions")
         for item in reversed(st.session_state['history'][-5:]):
             st.markdown(
-                f"<small><b>{item['category']}</b> · {item['difficulty']} · "
+                f"<small><b>{html.escape(str(item['category']))}</b> · {item['difficulty']} · "
                 f"{item['prob']:.0f}% prob</small><br>"
                 f"<small style='color:#6b7280'>{html.escape(item['question'][:60])}…</small>",
                 unsafe_allow_html=True
