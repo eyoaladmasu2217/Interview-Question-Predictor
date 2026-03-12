@@ -161,7 +161,7 @@ with st.sidebar:
             st.markdown(
                 f"<small><b>{item['category']}</b> · {item['difficulty']} · "
                 f"{item['prob']:.0f}% prob</small><br>"
-                f"<small style='color:#6b7280'>{item['question'][:60]}…</small>",
+                f"<small style='color:#6b7280'>{html.escape(item['question'][:60])}…</small>",
                 unsafe_allow_html=True
             )
             st.markdown("<hr style='margin:6px 0; border-color:#e5e7eb'>", unsafe_allow_html=True)
