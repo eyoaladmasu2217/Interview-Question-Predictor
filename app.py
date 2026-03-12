@@ -228,7 +228,7 @@ with tab_single:
                     q_type = detect_question_type(question)
                     st.markdown(
                         f"<div style='margin-bottom:1rem'>"
-                        f"Question type: <span class='badge badge-type'>💡 {q_type}</span>"
+                        f"Question type: <span class='badge badge-type'>💡 {html.escape(str(q_type))}</span>"
                         f"</div>",
                         unsafe_allow_html=True
                     )
