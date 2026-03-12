@@ -193,8 +193,11 @@ with tab_single:
         analyze_btn = st.button("Generate Analysis", use_container_width=True, key="single_analyze")
 
     if analyze_btn:
-        is_valid, error_msg = validate_question(question)
-        if not is_valid:
+        if len(question) > 5000:
+            st.warning("⚠️ Question exceeds maximum length of 5000 characters.")
+        else:
+            is_valid, error_msg = validate_question(question)
+            if not is_valid:
             with col_results:
                 st.warning(f"⚠️ {error_msg}")
         else:
