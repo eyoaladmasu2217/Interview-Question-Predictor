@@ -185,7 +185,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-tab_single, tab_batch = st.tabs(["🔍 Single Analyser", "📋 Batch Analyser"])
+tab_single, tab_batch = st.tabs(["🔍 Single Question Analyser", "📋 Batch Question Analyser"])
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
