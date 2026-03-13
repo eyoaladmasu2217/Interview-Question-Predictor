@@ -63,7 +63,7 @@ class Predictor:
         difficulty = self.diff_model.predict(X)[0]
         probability = self.prob_model.predict(X)[0]
 
-        cat_confidence  = self._confidence_scores(self.cat_model,  X, top_k=3)
+        cat_confidence  = self._confidence_scores(self.cat_model,  X, top_k=5)
         diff_confidence = self._confidence_scores(self.diff_model, X, top_k=3)
 
         return {
