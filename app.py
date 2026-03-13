@@ -93,6 +93,7 @@ st.markdown("""
     /* Text area */
     .stTextArea textarea { border-radius: 8px; border: 1px solid #d1d5db; padding: 1rem; font-family: 'Inter', sans-serif; }
     .stTextArea textarea { transition: border-color 0.2s, box-shadow 0.2s; }
+    .stTextArea textarea:hover { border-color: #9cb3e1; }
     .stTextArea textarea:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
 
     /* Batch result table tweaks */
