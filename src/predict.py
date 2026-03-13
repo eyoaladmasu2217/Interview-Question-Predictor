@@ -12,6 +12,7 @@ class Predictor:
         self.nn_vectorizer = None
         self.nn_model = None
         self.df = None
+        self.scaler = None
         self.load_models()
 
     def load_models(self):
