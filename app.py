@@ -61,7 +61,7 @@ st.markdown("""
     .badge { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 600; }
     .badge-easy       { background-color: #bbf7d0; color: #065f46; }
     .badge-medium     { background-color: #fed7aa; color: #9a3412; }
-    .badge-hard       { background-color: #fee2e2; color: #991b1b; }
+    .badge-hard       { background-color: #fecaca; color: #991b1b; }
     .badge-category   { background-color: #e0f2fe; color: #075985; }
     .badge-type       { background-color: #f3e8ff; color: #6b21a8; }
     .badge-keyword    { background-color: #fef9c3; color: #713f12; margin: 2px; display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 0.8rem; }
