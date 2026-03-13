@@ -25,6 +25,7 @@ def clean_text(text: str) -> str:
     """Lowercase, strip punctuation, and collapse whitespace."""
     if not isinstance(text, str):
         return ""
+    text = text.replace('\t', ' ')
     text = text.lower()
     text = re.sub(r'[' + re.escape(string.punctuation) + r']', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
