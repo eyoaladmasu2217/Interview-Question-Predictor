@@ -118,7 +118,7 @@ class Predictor:
     # ------------------------------------------------------------------
     # Related questions via nearest neighbours
     # ------------------------------------------------------------------
-    def get_related_questions(self, question_text, top_k=20):
+    def get_related_questions(self, question_text, top_k=10):
         """Return the top_k most similar questions from the training corpus."""
         if not self.nn_model or not self.nn_vectorizer or self.df is None:
             return []
