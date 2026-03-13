@@ -468,7 +468,7 @@ with tab_batch:
 
                     results_df = pd.DataFrame(rows)
 
-                    st.success(f"✅ Analysed **{len(results_df)}** question(s) successfully.")
+                    st.success(f"✅ Analysed **{len(results_df)}** question(s) successfully. Please find the results below.")
 
                     # Summary stats
                     s1, s2, s3 = st.columns(3)
