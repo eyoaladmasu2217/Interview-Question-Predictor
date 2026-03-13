@@ -53,7 +53,7 @@ st.markdown("""
     .metric-label {
         font-size: 0.875rem; font-weight: 600;
         text-transform: uppercase; letter-spacing: 0.05em;
-        color: #6b7280; margin-bottom: 0.5rem;
+        color: #4b5563; margin-bottom: 0.5rem;
     }
     .metric-value { font-size: 1.875rem; font-weight: 700; color: #111827; text-shadow: 0px 1px 2px rgba(0,0,0,0.05); }
 
