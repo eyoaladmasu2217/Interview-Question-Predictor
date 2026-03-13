@@ -378,6 +378,10 @@ with tab_single:
                     else:
                         st.info("No similar questions found in database.")
 
+                    # ── Raw JSON ──────────────────────────────────────────────
+                    with st.expander("View Raw JSON Output"):
+                        st.json(result)
+
     else:
         with col_results:
             st.info("Enter a question and click 'Generate Analysis' to see results.")
