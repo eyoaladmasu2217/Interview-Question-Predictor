@@ -72,7 +72,7 @@ def extract_keywords(text: str, top_n: int = 6) -> list[str]:
         A list of keyword strings, ranked by relevance score.
     """
     cleaned = clean_text(text)
-    tokens = [w for w in cleaned.split() if w not in _STOP_WORDS and len(w) > 2]
+    tokens = [w for w in cleaned.split() if w not in _STOP_WORDS and len(w) >= 2]
     if not tokens:
         return []
     freq = Counter(tokens)
