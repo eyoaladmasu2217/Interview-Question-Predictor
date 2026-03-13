@@ -492,7 +492,7 @@ with tab_batch:
                     e_col1, e_col2 = st.columns(2)
                     with e_col1:
                         st.download_button(
-                            label="⬇️ Download Full Results as CSV",
+                            label="⬇️ Download CSV Results",
                             data=csv_out,
                             file_name="batch_predictions.csv",
                             mime="text/csv",
