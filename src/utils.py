@@ -56,7 +56,7 @@ def validate_question(text: str, min_words: int = 3) -> tuple[bool, str]:
     return True, ""
 
 
-def truncate_text(text: str, max_chars: int = 120) -> str:
+def truncate_text(text: str, max_chars: int = 150) -> str:
     """Truncate text for display purposes, appending ellipsis if needed."""
     if len(text) <= max_chars:
         return text
