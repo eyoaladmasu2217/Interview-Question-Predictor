@@ -115,7 +115,7 @@ with st.sidebar:
     if st.button("Retrain System"):
         with st.spinner("Optimising models…"):
             train_models()
-        st.success("System Updated")
+        st.success("System Models Successfully Updated!")
 
     st.markdown("---")
     st.markdown("### 📊 Dataset Stats")
