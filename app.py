@@ -88,7 +88,7 @@ st.markdown("""
         padding: 0.75rem 1.5rem; border-radius: 8px; border: none;
         box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2);
     }
-    .stButton>button:hover { background-color: #1d4ed8; box-shadow: 0 6px 8px -1px rgba(37,99,235,0.3); transform: translateY(-1px); }
+    .stButton>button:hover { background-color: #1d4ed8; box-shadow: 0 6px 8px -1px rgba(37,99,235,0.3); transform: translateY(-2px); }
 
     /* Text area */
     .stTextArea textarea { border-radius: 8px; border: 1px solid #d1d5db; padding: 1rem; font-family: 'Inter', sans-serif; }
