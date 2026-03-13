@@ -17,7 +17,7 @@ _STOP_WORDS = {
     'what', 'how', 'why', 'when', 'where', 'which', 'who', 'whom', 'not',
     'if', 'then', 'else', 'so', 'yet', 'both', 'either', 'neither', 'just',
     'about', 'between', 'into', 'through', 'during', 'before', 'after',
-    'up', 'down', 'out', 'off', 'over', 'under', 'again', 'there', 'here',
+    'up', 'down', 'out', 'off', 'over', 'under', 'again', 'there', 'here', 'cannot', 'couldnt', 'wouldnt', 'shouldnt', 'hasnt', 'havent', 'hadnt',
 }
 
 
