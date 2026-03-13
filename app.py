@@ -59,7 +59,7 @@ st.markdown("""
 
     /* Badges */
     .badge { display: inline-block; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.9rem; font-weight: 600; }
-    .badge-easy       { background-color: #d1fae5; color: #065f46; }
+    .badge-easy       { background-color: #bbf7d0; color: #065f46; }
     .badge-medium     { background-color: #ffedd5; color: #9a3412; }
     .badge-hard       { background-color: #fee2e2; color: #991b1b; }
     .badge-category   { background-color: #e0f2fe; color: #075985; }
