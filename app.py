@@ -176,6 +176,9 @@ with st.sidebar:
             )
             st.markdown("<hr style='margin:6px 0; border-color:#e5e7eb'>", unsafe_allow_html=True)
 
+    st.markdown("---")
+    st.caption("Version 1.2.0 | Developed for Interview Prep")
+
 # ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
     <div class="main-header">
