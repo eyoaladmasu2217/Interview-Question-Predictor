@@ -55,7 +55,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     # Random Forest
     rf_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english', max_df=0.95, min_df=2)),
-        ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
+        ('clf', RandomForestClassifier(n_estimators=110, random_state=42))
     ])
     rf_cat_pipeline.fit(X_train, y_cat_train)
     rf_score = rf_cat_pipeline.score(X_test, y_cat_test)
