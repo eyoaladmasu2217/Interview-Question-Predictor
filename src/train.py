@@ -140,7 +140,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     X_tfidf = nn_vectorizer.fit_transform(X)
     
     from sklearn.neighbors import NearestNeighbors
-    nn_model = NearestNeighbors(n_neighbors=25, metric='cosine')
+    nn_model = NearestNeighbors(n_neighbors=25, metric='cosine', n_jobs=-1)
     nn_model.fit(X_tfidf)
 
     # Save Models
