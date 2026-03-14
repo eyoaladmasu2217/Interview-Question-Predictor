@@ -128,7 +128,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     logger.info("--- Training Probability Regressor ---")
     prob_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
-        ('reg', RandomForestRegressor(n_estimators=150, random_state=42))
+        ('reg', RandomForestRegressor(n_estimators=150, max_depth=30, random_state=42))
     ])
     prob_pipeline.fit(X_train, y_prob_train)
     mse = mean_squared_error(y_prob_test, prob_pipeline.predict(X_test))
