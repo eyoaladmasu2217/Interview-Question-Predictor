@@ -110,7 +110,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     # Logistic Regression
     lr_diff_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
-        ('clf', LogisticRegression(max_iter=1000, random_state=42))
+        ('clf', LogisticRegression(max_iter=1200, random_state=42))
     ])
     lr_diff_pipeline.fit(X_train, y_diff_train)
     lr_diff_score = lr_diff_pipeline.score(X_test, y_diff_test)
