@@ -73,7 +73,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     # Logistic Regression
     lr_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
-        ('clf', LogisticRegression(max_iter=1000, random_state=42))
+        ('clf', LogisticRegression(max_iter=1500, random_state=42))
     ])
     lr_cat_pipeline.fit(X_train, y_cat_train)
     lr_score = lr_cat_pipeline.score(X_test, y_cat_test)
