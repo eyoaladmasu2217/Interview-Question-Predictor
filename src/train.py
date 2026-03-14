@@ -92,7 +92,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     # Random Forest
     rf_diff_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
-        ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
+        ('clf', RandomForestClassifier(n_estimators=120, random_state=42))
     ])
     rf_diff_pipeline.fit(X_train, y_diff_train)
     rf_diff_score = rf_diff_pipeline.score(X_test, y_diff_test)
