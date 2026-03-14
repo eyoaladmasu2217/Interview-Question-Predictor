@@ -64,7 +64,7 @@ def train_models(data_path='data/Software Questions.csv', model_dir='models'):
     # SVM
     svm_cat_pipeline = Pipeline([
         ('tfidf', TfidfVectorizer(stop_words='english')),
-        ('clf', LinearSVC(random_state=42, C=1.1, dual='auto'))
+        ('clf', LinearSVC(random_state=42, C=1.2, dual='auto'))
     ])
     svm_cat_pipeline.fit(X_train, y_cat_train)
     svm_score = svm_cat_pipeline.score(X_test, y_cat_test)
